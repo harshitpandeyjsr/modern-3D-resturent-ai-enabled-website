@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ANGEETHI — An Open-Fire Kitchen, Mumbai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#15110D;
+    --ink-2:#1D1610;
+    --ink-3:#241B13;
+    --ember:#D9622B;
+    --ember-bright:#FF8A4C;
+    --brass:#C49A4A;
+    --brass-dim:#8C6F36;
+    --bone:#F2E9DD;
+    --bone-dim:#B9AD9B;
+    --moss:#222A20;
+    --line:rgba(242,233,221,0.12);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important;}
+  }
+
+  body{
+    background:var(--ink);
+    color:var(--bone);
+    font-family:'Manrope',sans-serif;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  ::selection{background:var(--ember); color:var(--ink);}
+
+  a{color:inherit; text-decoration:none;}
+
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.72rem;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--ember-bright);
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{
+    content:'';
+    width:18px; height:1px;
+    background:var(--ember-bright);
+    display:inline-block;
+  }
+
+  h1,h2,h3{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    letter-spacing:-0.01em;
+    line-height:1.05;
+  }
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:22px 5vw;
+    transition:background 0.4s ease, padding 0.4s ease, border-color 0.4s ease;
+    border-bottom:1px solid transparent;
+  }
+  nav.scrolled{
+    background:rgba(21,17,13,0.86);
+    backdrop-filter:blur(14px);
+    padding:14px 5vw;
+    border-bottom:1px solid var(--line);
+  }
+  .logo-mark{
+    font-family:'Fraunces',serif;
+    font-size:1.5rem;
+    font-weight:700;
+    letter-spacing:0.04em;
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+  }
+  .logo-mark .dot{
+    width:6px; height:6px; border-radius:50%;
+    background:var(--ember-bright);
+    display:inline-block;
+    box-shadow:0 0 10px 2px rgba(255,138,76,0.7);
+  }
+  .nav-links{
+    display:flex; gap:42px;
+    font-size:0.82rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    font-family:'JetBrains Mono',monospace;
+  }
+  .nav-links a{
+    position:relative;
+    color:var(--bone-dim);
+    transition:color 0.3s ease;
+  }
+  .nav-links a::after{
+    content:'';
+    position:absolute; left:0; bottom:-6px;
+    width:0; height:1px;
+    background:var(--ember-bright);
+    transition:width 0.3s ease;
+  }
+  .nav-links a:hover{color:var(--bone);}
+  .nav-links a:hover::after{width:100%;}
+  .nav-cta{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.78rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    border:1px solid var(--brass);
+    color:var(--bone);
+    padding:10px 20px;
+    transition:background 0.3s ease, color 0.3s ease;
+  }
+  .nav-cta:hover{background:var(--brass); color:var(--ink);}
+  .nav-toggle{display:none;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    height:100vh;
+    min-height:640px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    overflow:hidden;
+  }
+  #emberCanvas{
+    position:absolute; inset:0; width:100%; height:100%;
+    z-index:0;
+  }
+  .hero-vignette{
+    position:absolute; inset:0;
+    background:radial-gradient(ellipse at center 60%, rgba(21,17,13,0) 0%, rgba(21,17,13,0.55) 60%, rgba(21,17,13,0.95) 100%);
+    z-index:1;
+    pointer-events:none;
+  }
+  .hero-content{
+    position:relative; z-index:2;
+    padding:0 24px;
+  }
+  .hero-content .eyebrow{justify-content:center; margin-bottom:26px;}
+  .hero-content .eyebrow::before{display:none;}
+  .hero-title{
+    font-size:clamp(3.2rem, 11vw, 9rem);
+    text-transform:uppercase;
+    letter-spacing:0.01em;
+    background:linear-gradient(180deg, #FBEEDD 0%, var(--bone) 45%, var(--brass) 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    filter:drop-shadow(0 0 40px rgba(217,98,43,0.25));
+  }
+  .hero-sub{
+    margin-top:22px;
+    font-size:1.05rem;
+    color:var(--bone-dim);
+    font-weight:300;
+    max-width:480px;
+    margin-left:auto; margin-right:auto;
+    line-height:1.6;
+  }
+  .hero-sub strong{color:var(--bone); font-weight:500;}
+  .hero-buttons{
+    margin-top:42px;
+    display:flex; gap:18px; justify-content:center; flex-wrap:wrap;
+  }
+  .btn-primary, .btn-ghost{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.8rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    padding:15px 30px;
+    cursor:pointer;
+    border:1px solid transparent;
+    transition:all 0.3s ease;
+  }
+  .btn-primary{
+    background:var(--ember);
+    color:var(--ink);
+  }
+  .btn-primary:hover{background:var(--ember-bright); transform:translateY(-2px);}
+  .btn-ghost{
+    border-color:var(--line);
+    color:var(--bone);
+  }
+  .btn-ghost:hover{border-color:var(--brass); color:var(--brass);}
+
+  .scroll-cue{
+    position:absolute; bottom:34px; left:50%; transform:translateX(-50%);
+    z-index:2;
+    display:flex; flex-direction:column; align-items:center; gap:10px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.65rem;
+    letter-spacing:0.2em;
+    color:var(--bone-dim);
+    text-transform:uppercase;
+  }
+  .scroll-cue .line{
+    width:1px; height:36px;
+    background:linear-gradient(var(--ember-bright), transparent);
+    animation:scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse{
+    0%,100%{opacity:0.3;} 50%{opacity:1;}
+  }
+
+  /* ---------- SECTION GENERAL ---------- */
+  section{
+    position:relative;
+    padding:140px 5vw;
+  }
+  .section-head{
+    max-width:640px;
+    margin-bottom:64px;
+  }
+  .section-head h2{
+    font-size:clamp(2.2rem, 4.2vw, 3.6rem);
+    margin-top:18px;
+    color:var(--bone);
+  }
+  .section-head p{
+    margin-top:20px;
+    color:var(--bone-dim);
+    font-size:1.02rem;
+    line-height:1.7;
+    font-weight:300;
+    max-width:520px;
+  }
+
+  .reveal{
+    opacity:0; transform:translateY(28px);
+    transition:opacity 0.9s cubic-bezier(.16,.84,.44,1), transform 0.9s cubic-bezier(.16,.84,.44,1);
+  }
+  .reveal.in{opacity:1; transform:translateY(0);}
+
+  /* ---------- THE FIRE (3D vessel) ---------- */
+  .fire-section{
+    background:linear-gradient(180deg, var(--ink) 0%, var(--ink-2) 100%);
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:40px;
+    align-items:center;
+  }
+  .fire-copy .section-head{margin-bottom:34px;}
+  .fire-stats{
+    display:flex; gap:48px;
+    margin-top:40px;
+    flex-wrap:wrap;
+  }
+  .fire-stat .num{
+    font-family:'Fraunces',serif;
+    font-size:2.4rem;
+    color:var(--ember-bright);
+    font-weight:600;
+  }
+  .fire-stat .label{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.68rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--bone-dim);
+    margin-top:4px;
+  }
+  .vessel-stage{
+    position:relative;
+    height:560px;
+    border:1px solid var(--line);
+    background:radial-gradient(ellipse at 50% 70%, rgba(217,98,43,0.13) 0%, transparent 60%);
+  }
+  .vessel-stage canvas{width:100%; height:100%; display:block; cursor:grab;}
+  .vessel-stage:active canvas{cursor:grabbing;}
+  .vessel-hint{
+    position:absolute; bottom:18px; left:50%; transform:translateX(-50%);
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.65rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--bone-dim);
+    opacity:0.7;
+  }
+
+  /* ---------- MENU (docket) ---------- */
+  .menu-section{
+    background:var(--ink-2);
+  }
+  .docket{
+    max-width:760px;
+    margin:0 auto;
+    background:var(--ink-3);
+    border:1px solid var(--line);
+    position:relative;
+  }
+  .docket::before, .docket::after{
+    content:'';
+    position:absolute; left:0; right:0; height:14px;
+    background:
+      radial-gradient(circle at 10px 50%, var(--ink-2) 7px, transparent 7px) repeat-x;
+    background-size:24px 14px;
+  }
+  .docket::before{top:-7px;}
+  .docket::after{bottom:-7px; transform:rotate(180deg);}
+  .docket-head{
+    text-align:center;
+    padding:46px 30px 30px;
+    border-bottom:1px dashed var(--line);
+  }
+  .docket-head .logo-mark{justify-content:center; font-size:1.7rem;}
+  .docket-head .sub{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.7rem;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--bone-dim);
+    margin-top:10px;
+  }
+  .docket-group{padding:34px 40px;}
+  .docket-group + .docket-group{border-top:1px dashed var(--line);}
+  .docket-group h3{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.74rem;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--ember-bright);
+    font-weight:600;
+    margin-bottom:22px;
+  }
+  .docket-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:16px;
+    padding:11px 0;
+  }
+  .docket-item .item-name{
+    font-family:'Fraunces',serif;
+    font-size:1.12rem;
+    font-weight:500;
+    color:var(--bone);
+  }
+  .docket-item .item-desc{
+    font-size:0.82rem;
+    color:var(--bone-dim);
+    font-weight:300;
+    margin-top:3px;
+    max-width:380px;
+  }
+  .docket-item .item-price{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.92rem;
+    color:var(--brass);
+    white-space:nowrap;
+  }
+  .docket-foot{
+    text-align:center;
+    padding:30px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.68rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--bone-dim);
+  }
+
+  /* ---------- STORY ---------- */
+  .story-section{
+    background:var(--ink);
+    display:grid;
+    grid-template-columns:0.9fr 1.1fr;
+    gap:60px;
+    align-items:center;
+  }
+  .story-visual{
+    position:relative;
+    height:480px;
+    border:1px solid var(--line);
+    overflow:hidden;
+  }
+  .smoke-layer{
+    position:absolute; inset:0;
+    background:
+      radial-gradient(circle at 30% 110%, rgba(217,98,43,0.5) 0%, transparent 45%),
+      radial-gradient(circle at 70% 120%, rgba(196,154,74,0.35) 0%, transparent 40%),
+      linear-gradient(180deg, var(--ink-2) 0%, var(--ink-3) 100%);
+  }
+  .smoke-layer .wisp{
+    position:absolute;
+    width:220px; height:220px;
+    background:radial-gradient(circle, rgba(242,233,221,0.07) 0%, transparent 70%);
+    border-radius:50%;
+    filter:blur(6px);
+    animation:wispDrift 14s ease-in-out infinite;
+  }
+  .wisp.w1{left:10%; bottom:-10%; animation-delay:0s;}
+  .wisp.w2{left:50%; bottom:0%; animation-delay:-5s; width:300px; height:300px;}
+  .wisp.w3{left:70%; bottom:-15%; animation-delay:-9s;}
+  @keyframes wispDrift{
+    0%{transform:translateY(0) translateX(0) scale(1); opacity:0.4;}
+    50%{transform:translateY(-180px) translateX(30px) scale(1.3); opacity:0.15;}
+    100%{transform:translateY(-360px) translateX(-20px) scale(1.6); opacity:0;}
+  }
+  .story-quote{
+    position:absolute; bottom:30px; left:30px; right:30px;
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    font-size:1.1rem;
+    color:var(--bone);
+    line-height:1.5;
+  }
+  .story-quote span{
+    display:block;
+    margin-top:10px;
+    font-family:'JetBrains Mono',monospace;
+    font-style:normal;
+    font-size:0.66rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--ember-bright);
+  }
+  .story-copy p{
+    color:var(--bone-dim);
+    font-weight:300;
+    line-height:1.8;
+    font-size:1rem;
+    margin-bottom:20px;
+  }
+  .story-copy p strong{color:var(--bone); font-weight:500;}
+
+  /* ---------- ATMOSPHERE / GALLERY (tilt cards) ---------- */
+  .atmosphere-section{
+    background:var(--ink-2);
+  }
+  .tilt-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:24px;
+  }
+  .tilt-card{
+    height:340px;
+    position:relative;
+    border:1px solid var(--line);
+    overflow:hidden;
+    transform-style:preserve-3d;
+    transition:transform 0.15s ease-out, border-color 0.3s ease;
+    will-change:transform;
+  }
+  .tilt-card:hover{border-color:var(--brass-dim);}
+  .tilt-bg{
+    position:absolute; inset:0;
+    transform:translateZ(0);
+  }
+  .tilt-card:nth-child(1) .tilt-bg{background:radial-gradient(circle at 30% 30%, #3A2412 0%, var(--ink-3) 70%);}
+  .tilt-card:nth-child(2) .tilt-bg{background:radial-gradient(circle at 70% 40%, #4A2B14 0%, var(--ink-3) 70%);}
+  .tilt-card:nth-child(3) .tilt-bg{background:radial-gradient(circle at 50% 70%, #2E2517 0%, var(--ink-3) 70%);}
+  .tilt-glow{
+    position:absolute; width:160px; height:160px; border-radius:50%;
+    background:radial-gradient(circle, rgba(255,138,76,0.45), transparent 70%);
+    bottom:-60px; left:50%; transform:translateX(-50%) translateZ(40px);
+    filter:blur(8px);
+  }
+  .tilt-label{
+    position:absolute; left:24px; bottom:24px; transform:translateZ(60px);
+  }
+  .tilt-label .eyebrow{margin-bottom:8px;}
+  .tilt-label .eyebrow::before{display:none;}
+  .tilt-label h3{
+    font-size:1.5rem;
+    color:var(--bone);
+  }
+
+  /* ---------- RESERVE ---------- */
+  .reserve-section{
+    background:var(--ink);
+    display:grid;
+    grid-template-columns:0.8fr 1.2fr;
+    gap:60px;
+  }
+  .reserve-info .info-row{
+    display:flex; gap:18px;
+    padding:20px 0;
+    border-top:1px solid var(--line);
+  }
+  .reserve-info .info-row:last-child{border-bottom:1px solid var(--line);}
+  .info-row .label{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.68rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--ember-bright);
+    width:110px;
+    flex-shrink:0;
+    padding-top:2px;
+  }
+  .info-row .value{
+    color:var(--bone);
+    font-weight:300;
+    line-height:1.6;
+  }
+
+  form.reserve-form{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:26px;
+  }
+  .field{display:flex; flex-direction:column; gap:8px;}
+  .field.full{grid-column:1 / -1;}
+  .field label{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.66rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--bone-dim);
+  }
+  .field input, .field select, .field textarea{
+    background:transparent;
+    border:none;
+    border-bottom:1px solid var(--line);
+    color:var(--bone);
+    font-family:'Manrope',sans-serif;
+    font-size:1rem;
+    padding:10px 2px;
+    transition:border-color 0.3s ease;
+  }
+  .field select option{background:var(--ink-2);}
+  .field input:focus, .field select:focus, .field textarea:focus{
+    outline:none;
+    border-color:var(--ember-bright);
+  }
+  .field textarea{resize:vertical; min-height:70px;}
+  .reserve-form .btn-primary{
+    grid-column:1 / -1;
+    width:fit-content;
+    margin-top:10px;
+    border:none;
+  }
+  .form-note{
+    grid-column:1/-1;
+    font-size:0.8rem;
+    color:var(--bone-dim);
+    display:none;
+    font-family:'JetBrains Mono',monospace;
+    letter-spacing:0.04em;
+  }
+  .form-note.show{display:block;}
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    padding:60px 5vw 36px;
+    border-top:1px solid var(--line);
+    background:var(--ink-2);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:24px;
+  }
+  footer .logo-mark{font-size:1.2rem;}
+  .footer-links{
+    display:flex; gap:30px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.72rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--bone-dim);
+  }
+  .footer-links a:hover{color:var(--ember-bright);}
+  .footer-credit{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.66rem;
+    color:var(--bone-dim);
+    letter-spacing:0.05em;
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:980px){
+    .fire-section, .story-section, .reserve-section{grid-template-columns:1fr;}
+    .story-section .story-visual{order:-1;}
+    .tilt-grid{grid-template-columns:1fr 1fr;}
+    .vessel-stage{height:420px;}
+  }
+  @media (max-width:720px){
+    .nav-links{display:none;}
+    section{padding:96px 6vw;}
+    .tilt-grid{grid-template-columns:1fr;}
+    form.reserve-form{grid-template-columns:1fr;}
+    .docket-group{padding:28px 22px;}
+    .docket-item{flex-direction:column; gap:2px;}
+  }
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="logo-mark">ANGEETHI<span class="dot"></span></div>
+  <div class="nav-links">
+    <a href="#fire">The Fire</a>
+    <a href="#menu">Menu</a>
+    <a href="#story">Story</a>
+    <a href="#atmosphere">Atmosphere</a>
+  </div>
+  <a href="#reserve" class="nav-cta">Reserve</a>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <canvas id="emberCanvas"></canvas>
+  <div class="hero-vignette"></div>
+  <div class="hero-content">
+    <div class="eyebrow">Mumbai · Open-Fire Kitchen</div>
+    <h1 class="hero-title">Angeethi</h1>
+    <p class="hero-sub">Every plate at our table begins the same way — <strong>live coal, clay, and patience.</strong> No gas, no shortcuts. Just fire doing what it has always done best.</p>
+    <div class="hero-buttons">
+      <a href="#reserve" class="btn-primary">Reserve a Table</a>
+      <a href="#menu" class="btn-ghost">View the Docket</a>
+    </div>
+  </div>
+  <div class="scroll-cue"><span>Scroll</span><span class="line"></span></div>
+</section>
+
+<!-- ============ THE FIRE / 3D VESSEL ============ -->
+<section class="fire-section" id="fire">
+  <div class="fire-copy reveal">
+    <div class="section-head">
+      <div class="eyebrow">Cooked Over Coal</div>
+      <h2>One vessel. Three hundred degrees of honesty.</h2>
+      <p>Our tandoor is hand-built from Bikaner clay and fired before service every single day. Nothing inside it is rushed — the heat does the seasoning, the smoke does the rest.</p>
+    </div>
+    <div class="fire-stats">
+      <div class="fire-stat">
+        <div class="num">480°C</div>
+        <div class="label">Peak Coal Temp</div>
+      </div>
+      <div class="fire-stat">
+        <div class="num">14 Yrs</div>
+        <div class="label">Same Clay Vessel</div>
+      </div>
+      <div class="fire-stat">
+        <div class="num">90 Sec</div>
+        <div class="label">Avg. Sear Time</div>
+      </div>
+    </div>
+  </div>
+  <div class="vessel-stage reveal">
+    <canvas id="vesselCanvas"></canvas>
+    <div class="vessel-hint">Drag to rotate</div>
+  </div>
+</section>
+
+<!-- ============ MENU / DOCKET ============ -->
+<section class="menu-section" id="menu">
+  <div class="section-head reveal" style="margin-left:auto;margin-right:auto;text-align:center;">
+    <div class="eyebrow" style="justify-content:center;"><span></span>The Docket</div>
+    <h2>Tonight's Fire</h2>
+    <p style="margin-left:auto;margin-right:auto;">A short, seasonal menu — built around what the coal can do, not the other way round.</p>
+  </div>
+
+  <div class="docket reveal">
+    <div class="docket-head">
+      <div class="logo-mark">ANGEETHI<span class="dot"></span></div>
+      <div class="sub">Order No. 014 · Table for Two</div>
+    </div>
+
+    <div class="docket-group">
+      <h3>From the Coal</h3>
+      <div class="docket-item">
+        <div><div class="item-name">Smoked Malai Kebab</div><div class="item-desc">Cream-marinated chicken, charred green chilli, mint ash</div></div>
+        <div class="item-price">₹ 620</div>
+      </div>
+      <div class="docket-item">
+        <div><div class="item-name">Charcoal Paneer Tikka</div><div class="item-desc">Hung curd, kasundi, blistered over open flame</div></div>
+        <div class="item-price">₹ 460</div>
+      </div>
+      <div class="docket-item">
+        <div><div class="item-name">Tandoori Pomfret</div><div class="item-desc">Whole catch, carom seed rub, lime char</div></div>
+        <div class="item-price">₹ 890</div>
+      </div>
+    </div>
+
+    <div class="docket-group">
+      <h3>From the Vessel</h3>
+      <div class="docket-item">
+        <div><div class="item-name">Dal Angeethi</div><div class="item-desc">Black lentil, 18-hour ember simmer, smoked butter</div></div>
+        <div class="item-price">₹ 410</div>
+      </div>
+      <div class="docket-item">
+        <div><div class="item-name">Laal Maas</div><div class="item-desc">Mutton, Mathania chilli, clay-pot slow braise</div></div>
+        <div class="item-price">₹ 780</div>
+      </div>
+    </div>
+
+    <div class="docket-group">
+      <h3>From the Embers</h3>
+      <div class="docket-item">
+        <div><div class="item-name">Phirni, Burnt Honey</div><div class="item-desc">Rice pudding, saffron, torched honeycomb</div></div>
+        <div class="item-price">₹ 320</div>
+      </div>
+      <div class="docket-item">
+        <div><div class="item-name">Roasted Banana Kulfi</div><div class="item-desc">Fire-caramelised banana, jaggery, pistachio</div></div>
+        <div class="item-price">₹ 290</div>
+      </div>
+    </div>
+
+    <div class="docket-foot">Prices inclusive of taxes · Tasting menu available on request</div>
+  </div>
+</section>
+
+<!-- ============ STORY ============ -->
+<section class="story-section" id="story">
+  <div class="story-visual reveal">
+    <div class="smoke-layer">
+      <div class="wisp w1"></div>
+      <div class="wisp w2"></div>
+      <div class="wisp w3"></div>
+    </div>
+    <div class="story-quote">
+      "We don't season with much. The fire already knows what it's doing."
+      <span>— Head Chef, Angeethi</span>
+    </div>
+  </div>
+  <div class="story-copy reveal">
+    <div class="section-head">
+      <div class="eyebrow">The Philosophy</div>
+      <h2>Built around a fire that never goes out</h2>
+    </div>
+    <p>Angeethi opened in 2019 with one rule: <strong>if it can't be cooked over live coal, it doesn't go on the menu.</strong> No induction, no microwaves, no shortcuts hiding behind a pass.</p>
+    <p>Our grain, our dairy, and most of our produce travel less than 200km to reach the kitchen. We work directly with three farming families outside Mumbai who grow specifically for our fire — slower vegetables, denser grains, things that can survive heat without disappearing.</p>
+    <p>What you taste on the plate is mostly restraint. <strong>Good coal does the rest.</strong></p>
+  </div>
+</section>
+
+<!-- ============ ATMOSPHERE ============ -->
+<section class="atmosphere-section" id="atmosphere">
+  <div class="section-head reveal">
+    <div class="eyebrow">Atmosphere</div>
+    <h2>Low light. Slow service. Loud fire.</h2>
+    <p>Twenty-two covers, an open kitchen, and a dining room built to keep your attention on the coal.</p>
+  </div>
+  <div class="tilt-grid">
+    <div class="tilt-card reveal">
+      <div class="tilt-bg"></div>
+      <div class="tilt-glow"></div>
+      <div class="tilt-label"><div class="eyebrow">01</div><h3>The Open Kitchen</h3></div>
+    </div>
+    <div class="tilt-card reveal">
+      <div class="tilt-bg"></div>
+      <div class="tilt-glow"></div>
+      <div class="tilt-label"><div class="eyebrow">02</div><h3>The Coal Bar</h3></div>
+    </div>
+    <div class="tilt-card reveal">
+      <div class="tilt-bg"></div>
+      <div class="tilt-glow"></div>
+      <div class="tilt-label"><div class="eyebrow">03</div><h3>The Back Room</h3></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RESERVE ============ -->
+<section class="reserve-section" id="reserve">
+  <div class="reserve-info reveal">
+    <div class="section-head" style="margin-bottom:30px;">
+      <div class="eyebrow">Reserve</div>
+      <h2>Book a table</h2>
+    </div>
+    <div class="info-row"><div class="label">Address</div><div class="value">14 Pali Hill Road, Bandra West, Mumbai 400050</div></div>
+    <div class="info-row"><div class="label">Hours</div><div class="value">Tue – Sun, 7:00 PM – 12:30 AM<br>Closed Mondays</div></div>
+    <div class="info-row"><div class="label">Phone</div><div class="value">+91 98200 11442</div></div>
+    <div class="info-row"><div class="label">Note</div><div class="value">Tasting menu seatings at 7:30 PM and 9:30 PM only</div></div>
+  </div>
+
+  <form class="reserve-form reveal" id="reserveForm">
+    <div class="field">
+      <label for="name">Name</label>
+      <input type="text" id="name" required placeholder="Your full name">
+    </div>
+    <div class="field">
+      <label for="phone">Phone</label>
+      <input type="tel" id="phone" required placeholder="+91">
+    </div>
+    <div class="field">
+      <label for="date">Date</label>
+      <input type="date" id="date" required>
+    </div>
+    <div class="field">
+      <label for="guests">Guests</label>
+      <select id="guests" required>
+        <option value="">Select</option>
+        <option>1</option><option>2</option><option>3</option><option>4</option>
+        <option>5</option><option>6+</option>
+      </select>
+    </div>
+    <div class="field full">
+      <label for="notes">Notes (optional)</label>
+      <textarea id="notes" placeholder="Allergies, occasion, seating preference..."></textarea>
+    </div>
+    <button type="submit" class="btn-primary">Confirm Reservation</button>
+    <div class="form-note" id="formNote">Reservation request received — we'll confirm by phone shortly.</div>
+  </form>
+</section>
+
+<footer>
+  <div class="logo-mark">ANGEETHI<span class="dot"></span></div>
+  <div class="footer-links">
+    <a href="#fire">The Fire</a>
+    <a href="#menu">Menu</a>
+    <a href="#story">Story</a>
+    <a href="#reserve">Reserve</a>
+  </div>
+  <div class="footer-credit">© 2026 Angeethi, Bandra West — Portfolio Concept</div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ---------------- NAV SCROLL STATE ---------------- */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+/* ---------------- SCROLL REVEAL ---------------- */
+const revealEls = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+}, { threshold: 0.15 });
+revealEls.forEach(el => io.observe(el));
+
+/* ---------------- HERO EMBER PARTICLES (Canvas2D) ---------------- */
+(function(){
+  const canvas = document.getElementById('emberCanvas');
+  const ctx = canvas.getContext('2d');
+  let w, h, particles = [];
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function resize(){
+    w = canvas.width = canvas.offsetWidth * devicePixelRatio;
+    h = canvas.height = canvas.offsetHeight * devicePixelRatio;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  const COUNT = reducedMotion ? 0 : 90;
+  for(let i=0;i<COUNT;i++){
+    particles.push({
+      x: Math.random()*w,
+      y: h + Math.random()*h*0.5,
+      r: (Math.random()*2.2+0.6) * devicePixelRatio,
+      speed: (Math.random()*0.6+0.25) * devicePixelRatio,
+      drift: (Math.random()-0.5)*0.4,
+      life: Math.random(),
+      flick: Math.random()*Math.PI*2,
+      hue: Math.random() > 0.65 ? '255,138,76' : '217,98,43'
+    });
+  }
+
+  let mouseX = 0;
+  window.addEventListener('mousemove', (e) => {
+    mouseX = (e.clientX / window.innerWidth - 0.5);
+  });
+
+  function tick(){
+    ctx.clearRect(0,0,w,h);
+    particles.forEach(p => {
+      p.y -= p.speed;
+      p.x += p.drift + mouseX*0.3;
+      p.flick += 0.08;
+      if(p.y < -20){
+        p.y = h + 20;
+        p.x = Math.random()*w;
+      }
+      const alpha = 0.35 + Math.sin(p.flick)*0.25;
+      const grad = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*4);
+      grad.addColorStop(0, `rgba(${p.hue},${Math.max(alpha,0.1)})`);
+      grad.addColorStop(1, `rgba(${p.hue},0)`);
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r*4,0,Math.PI*2);
+      ctx.fill();
+    });
+    if(!reducedMotion) requestAnimationFrame(tick);
+  }
+  tick();
+})();
+
+/* ---------------- 3D TANDOOR VESSEL (Three.js) ---------------- */
+(function(){
+  const stage = document.getElementById('vesselCanvas');
+  if(!stage || typeof THREE === 'undefined') return;
+
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const parent = stage.parentElement;
+  let width = parent.clientWidth, height = parent.clientHeight;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(38, width/height, 0.1, 100);
+  camera.position.set(0, 1.4, 7.5);
+
+  const renderer = new THREE.WebGLRenderer({ canvas: stage, antialias:true, alpha:true });
+  renderer.setSize(width, height);
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+
+  // Lighting
+  scene.add(new THREE.AmbientLight(0x6b5a44, 0.7));
+  const emberLight = new THREE.PointLight(0xff7a3c, 3.2, 12, 2);
+  emberLight.position.set(0, 0.6, 1.2);
+  scene.add(emberLight);
+  const rimLight = new THREE.DirectionalLight(0xc49a4a, 0.6);
+  rimLight.position.set(-3, 4, -2);
+  scene.add(rimLight);
+
+  // Tandoor profile via Lathe geometry
+  const profilePts = [
+    new THREE.Vector2(0.0, 0.0),
+    new THREE.Vector2(0.92, 0.0),
+    new THREE.Vector2(1.05, 0.25),
+    new THREE.Vector2(1.12, 0.75),
+    new THREE.Vector2(1.0, 1.35),
+    new THREE.Vector2(0.78, 1.95),
+    new THREE.Vector2(0.6, 2.35),
+    new THREE.Vector2(0.66, 2.55),
+    new THREE.Vector2(0.5, 2.78)
+  ];
+  const latheGeo = new THREE.LatheGeometry(profilePts, 48);
+  const clayMat = new THREE.MeshStandardMaterial({
+    color: 0x5a3a22,
+    roughness: 0.85,
+    metalness: 0.05,
+    emissive: 0x331505,
+    emissiveIntensity: 0.4
+  });
+  const vessel = new THREE.Mesh(latheGeo, clayMat);
+  vessel.position.y = -1.3;
+  scene.add(vessel);
+
+  // Inner ember glow disc (top opening)
+  const glowGeo = new THREE.CircleGeometry(0.46, 32);
+  const glowMat = new THREE.MeshBasicMaterial({ color: 0xff7a3c, transparent:true, opacity:0.9 });
+  const glowDisc = new THREE.Mesh(glowGeo, glowMat);
+  glowDisc.rotation.x = -Math.PI/2;
+  glowDisc.position.set(0, 0.07, 0);
+  scene.add(glowDisc);
+
+  // Brass rim accent torus
+  const rimGeo = new THREE.TorusGeometry(0.5, 0.025, 12, 48);
+  const rimMat = new THREE.MeshStandardMaterial({ color:0xC49A4A, metalness:0.7, roughness:0.3 });
+  const rimTorus = new THREE.Mesh(rimGeo, rimMat);
+  rimTorus.rotation.x = Math.PI/2;
+  rimTorus.position.set(0,0.07,0);
+  scene.add(rimTorus);
+
+  // Floating embers around vessel
+  const emberGroup = new THREE.Group();
+  const emberCount = reducedMotion ? 0 : 26;
+  const emberGeo = new THREE.SphereGeometry(0.03, 6, 6);
+  const emberMat = new THREE.MeshBasicMaterial({ color: 0xff8a4c });
+  const emberData = [];
+  for(let i=0;i<emberCount;i++){
+    const m = new THREE.Mesh(emberGeo, emberMat.clone());
+    const angle = Math.random()*Math.PI*2;
+    const radius = 0.6 + Math.random()*0.9;
+    m.position.set(Math.cos(angle)*radius, -0.5 + Math.random()*0.6, Math.sin(angle)*radius);
+    emberGroup.add(m);
+    emberData.push({ mesh:m, speed: 0.004+Math.random()*0.006, phase: Math.random()*Math.PI*2, baseY: m.position.y });
+  }
+  scene.add(emberGroup);
+
+  // Drag to rotate
+  let isDragging = false, prevX = 0, rotY = 0.4, targetRotY = 0.4;
+  stage.addEventListener('pointerdown', (e) => { isDragging = true; prevX = e.clientX; });
+  window.addEventListener('pointerup', () => isDragging = false);
+  window.addEventListener('pointermove', (e) => {
+    if(!isDragging) return;
+    const dx = e.clientX - prevX;
+    targetRotY += dx * 0.005;
+    prevX = e.clientX;
+  });
+
+  function resizeRenderer(){
+    width = parent.clientWidth; height = parent.clientHeight;
+    camera.aspect = width/height;
+    camera.updateProjectionMatrix();
+    renderer.setSize(width, height);
+  }
+  window.addEventListener('resize', resizeRenderer);
+
+  let t = 0;
+  function animate(){
+    t += 0.01;
+    if(!isDragging) targetRotY += reducedMotion ? 0 : 0.0022;
+    rotY += (targetRotY - rotY) * 0.08;
+    vessel.rotation.y = rotY;
+    rimTorus.rotation.z = rotY;
+    emberGroup.rotation.y = rotY;
+
+    glowDisc.material.opacity = 0.7 + Math.sin(t*3)*0.25;
+    emberLight.intensity = 2.8 + Math.sin(t*4)*0.6;
+
+    emberData.forEach(d => {
+      d.mesh.position.y = d.baseY + Math.sin(t*2 + d.phase) * 0.18;
+      d.mesh.material.opacity = 0.5 + Math.sin(t*3+d.phase)*0.5;
+      d.mesh.material.transparent = true;
+    });
+
+    renderer.render(scene, camera);
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+
+/* ---------------- TILT CARDS ---------------- */
+document.querySelectorAll('.tilt-card').forEach(card => {
+  card.addEventListener('mousemove', (e) => {
+    const rect = card.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    card.style.transform = `perspective(800px) rotateY(${x*10}deg) rotateX(${-y*10}deg) translateZ(0)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = 'perspective(800px) rotateY(0deg) rotateX(0deg)';
+  });
+});
+
+/* ---------------- RESERVE FORM ---------------- */
+document.getElementById('reserveForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  const note = document.getElementById('formNote');
+  note.classList.add('show');
+  this.querySelector('.btn-primary').textContent = 'Request Sent';
+});
+</script>
+</body>
+</html>
